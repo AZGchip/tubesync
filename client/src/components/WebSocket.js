@@ -46,8 +46,8 @@ class WebSocket extends Component {
       data: true
     }));
     console.log("attempting to play")
-  }
-  componentWillMount() {
+  } 
+  componentDidMount(){
     client.onopen = () => {
       console.log('WebSocket Client Connected');
     };
@@ -73,6 +73,33 @@ class WebSocket extends Component {
     }
 
   };
+  
+  // componentWillMount() {
+  //   client.onopen = () => {
+  //     console.log('WebSocket Client Connected');
+  //   };
+  //   client.onmessage = (message) => {
+  //     const serverData = JSON.parse(message.data);
+
+  //     switch (serverData.action) {
+  //       case "load_and_sync":
+  //         console.log("sending load request")
+  //         this.setState({ videoId: serverData.data })
+          
+  //         break;
+  //       case "sync_start":
+  //         console.log("syncing")
+          
+  //         break;
+  //       case "play":
+  //         player.playVideo()
+
+  //     }
+
+  //     console.log("reply received: ", serverData)
+  //   }
+
+  // };
   _onStateChange(event) {
     console.log(event)
     if (event.data === 5){

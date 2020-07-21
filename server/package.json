@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "websocket": "node servertwo.js",
     "watch": "nodemon server.js"
   },
   "keywords": [],

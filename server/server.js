@@ -21,6 +21,7 @@ db.once('open', () => {
   app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
 });
 
+//websocket server
 // const webSocketServer = require("websocket").server
 // const http = require("http");
 // let userActivity = [];
