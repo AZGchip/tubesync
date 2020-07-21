@@ -11,7 +11,8 @@ const options = {
     autoplay: 0,
   },
 };
-const client = new W3CWebSocket('ws://127.0.0.1:8050');
+var HOST = window.location.origin.replace(/^http/, 'ws')
+const client = new W3CWebSocket(HOST);
 
 class WebSocket extends Component {
   constructor(props) {
