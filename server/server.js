@@ -6,6 +6,7 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -19,3 +20,81 @@ app.use(routes);
 db.once('open', () => {
   app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
 });
+
+// const webSocketServer = require("websocket").server
+// const http = require("http");
+// let userActivity = [];
+// const webSocketServerPort = 8000;
+// // Starts http server and the websocket server.
+// const server = http.createServer();
+// server.listen(webSocketServerPort);
+// const wss = new webSocketServer({
+//     httpServer: server
+// });
+// const typesDef = {
+//     USER_EVENT: "userevent",
+//     CONTENT_CHANGE: "contentchange"
+// }
+// //all active connections are stored in this object
+// const clients = {};
+// const users = {};
+
+// let connected = 0;
+// // This code generates unique userid for everyuser.
+// const getUniqueID = () => {
+//     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+//     return s4() + s4() + '-' + s4();
+// };
+// wss.on('request', function (request) {
+//   var userID = getUniqueID();
+//   console.log((new Date()) + ' Recieved a new connection from origin ' + request.origin + '.');
+
+//   // You can rewrite this part of the code to accept only the requests from allowed origin
+//   const connection = request.accept(null, request.origin);
+//   clients[userID] = connection;
+//   console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients))
+
+//   connection.on('message', function (message) {
+//       if (message.type === "utf8") {
+//           console.log("message:", message)
+//           const recievedData = JSON.parse(message.utf8Data);
+//           console.log(recievedData)
+//           if (recievedData.action === "load_and_sync") {
+//               console.log("receved: ", recievedData)
+
+//               for (key in clients) {
+//                   clients[key].sendUTF(message.utf8Data);
+//               }
+//           }
+//           else if (recievedData.action === "sync_start") {
+//               console.log("Preparing Sync")
+
+
+//               for (key in clients) {
+
+//               }
+
+//               for (key in clients) {
+//                   clients[key].sendUTF(message.utf8Data);
+//               }
+
+//           }
+//           else if (recievedData.action === "play") {
+//               for (key in clients) {
+//                   clients[key].sendUTF(message.utf8Data);
+//               }
+//           }
+//       }
+//   });
+
+//   connection.on('close', function (connection) {
+//       connected--
+//       console.log((new Date()) + " User " + userID + " disconnected.");
+//       const json = { type: typesDef.USER_EVENT };
+
+//       json.data = { users, userActivity };
+//       delete clients[userID];
+//       delete users[userID];
+//       console.log("remaining clients: ", clients)
+//   });
+// });

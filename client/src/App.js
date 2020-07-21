@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SearchBooks from './pages/SearchBooks';
 import SavedBooks from './pages/SavedBooks';
 import Navbar from './components/Navbar';
-
+import Websocket from './components/WebSocket'
 import * as API from './utils/API';
 import AuthService from './utils/auth';
 
@@ -11,6 +11,7 @@ import AuthService from './utils/auth';
 import UserInfoContext from './utils/UserInfoContext';
 
 function App() {
+  
   // set data to be used for UserInfoContext and make it available to all other components
   const [userInfo, setUserInfo] = useState({
     savedBooks: [],

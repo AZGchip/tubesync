@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
-
+import WebSocket from "../components/WebSocket"
 // import context for global state
 import UserInfoContext from '../utils/UserInfoContext';
 
@@ -33,6 +33,7 @@ function SavedBooks() {
         </Container>
       </Jumbotron>
       <Container>
+        <WebSocket/>
         <h2>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
