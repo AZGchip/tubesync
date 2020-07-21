@@ -11,7 +11,7 @@ const options = {
     autoplay: 0,
   },
 };
-var HOST = window.location.origin.replace(/^http/, 'ws')
+var HOST = location.origin.replace(/^http/, 'ws')
 const client = new W3CWebSocket(HOST);
 
 class WebSocket extends Component {
