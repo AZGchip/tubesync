@@ -18,19 +18,19 @@ function AppNavbar() {
       <Navbar bg='dark' variant='dark' expand='lg'>
         <Container fluid>
           <Navbar.Brand as={Link} to='/'>
-            Google Books Search
+            <img src="/tube_logo.png" style={{height:30}}></img>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='navbar' />
           <Navbar.Collapse id='navbar'>
             <Nav className='ml-auto'>
               <Nav.Link as={Link} to='/'>
-                Search For Books
+                Find Syncs
               </Nav.Link>
               {/* if user is logged in show saved books and logout */}
               {username ? (
                 <>
                   <Nav.Link as={Link} to='/saved'>
-                    See {username}'s Books
+                    Start Sync
                   </Nav.Link>
                   <Nav.Link onClick={AuthService.logout}>Logout</Nav.Link>
                 </>

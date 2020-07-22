@@ -11,7 +11,7 @@ const options = {
     autoplay: 0,
   },
 };
-var HOST = window.location.origin.replace(/^https/, 'ws').replace("/saved","")
+var HOST = process.env.WEBSOCKET || 'ws://127.0.0.1:8050';
 const client = new W3CWebSocket(HOST);
 
 class WebSocket extends Component {
