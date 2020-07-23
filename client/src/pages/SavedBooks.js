@@ -29,7 +29,7 @@ function SavedBooks() {
     <>
       
       <Container>
-        <WebSocket/>
+        <WebSocket userName={userData.username}/>
         <h4>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`

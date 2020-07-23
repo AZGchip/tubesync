@@ -40,6 +40,10 @@ const typesDef = {
 //all active connections are stored in this object
 const clients = {};
 const users = {};
+let editorContent = null;
+// User activity history.
+
+
 
 let connected = 0;
 // This code generates unique userid for everyuser.
@@ -62,6 +66,7 @@ wss.on('request', function (request) {
             console.log("message:", message)
             const recievedData = JSON.parse(message.utf8Data);
             console.log(recievedData)
+            const json = { type: recievedData.type };
             if (recievedData.action === "load_and_sync") {
                 console.log("receved: ", recievedData)
 
@@ -71,14 +76,6 @@ wss.on('request', function (request) {
             }
             else if (recievedData.action === "sync_start") {
                 console.log("Preparing Sync")
-
-
-                for (key in clients) {
-
-                }
-
-
-
 
                 for (key in clients) {
                     clients[key].sendUTF(message.utf8Data);
@@ -90,7 +87,28 @@ wss.on('request', function (request) {
                     clients[key].sendUTF(message.utf8Data);
                 }
             }
-
+            else if (recievedData.action === "chat") {
+                for (key in clients) {
+                    clients[key].sendUTF(message.utf8Data);
+                }
+            }
+             if (recievedData.type === typesDef.USER_EVENT) {
+                users[userID] = recievedData;
+                userActivity.push(`${recievedData.username} joined to edit the document`);
+                json.data = { users, userActivity };
+                for (key in clients) {
+                    clients[key].sendUTF(JSON.stringify(json));
+                }
+            }
+           if (recievedData.type === typesDef.CONTENT_CHANGE) {
+                editorContent = recievedData.content;
+                json.data = { editorContent, userActivity };
+                
+                for (key in clients) {
+                    clients[key].sendUTF(JSON.stringify(json));
+                }
+            }
+            
 
         }
 
