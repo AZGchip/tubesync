@@ -9,9 +9,12 @@ let player;
 let video = "";
 const options = {
   height: '390',
-  width: '640',
+  width: '100%',
   playerVars: {
     autoplay: 0,
+    rel:0,
+    controls:0,
+    modestbranding:1
   },
 };
 var HOST = process.env.WEBSOCKET || 'ws://127.0.0.1:8050';
@@ -36,26 +39,32 @@ class WebSocket extends Component {
       currentUsers: [],
       userActivity: [],
       username: null,
-      text: ''
+      text: '',
+      textcolor:"",
+      chatInput: ""
     };
     this.handleInput = this.handleInput.bind(this)
     this.handleChatInput = this.handleChatInput.bind(this)
 
   }
   componentWillReceiveProps(nextProps) {
-    console.log("will recieve",nextProps)
+    console.log("will recieve", nextProps)
     this.setState({ username: nextProps.nameOfUser });
     return nextProps
   }
-
+   numberBetween(min, max) { 
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  //logs user in using login info or generates guest name
   logInUser = (user) => {
     console.log("username", user)
-    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    const s4 = () => Math.floor((2 + Math.random()) * 0x10000).toString(16).substring(1);
     const username = this.props.nameOfUser || "guest-" + s4();
-
+    const textcolor= this.numberBetween(0,5)
     if (username.trim()) {
       const data = {
-        username
+        username,
+        textcolor
       };
       this.setState({
         ...data
@@ -78,11 +87,11 @@ class WebSocket extends Component {
     console.log("attempting to send", videoId)
 
   }
-  playVideo = () => {
+  playVideo = (action) => {
 
     client.send(JSON.stringify({
       type: "message",
-      action: "play",
+      action: action,
       data: true
     }));
     console.log("attempting to play")
@@ -94,7 +103,7 @@ class WebSocket extends Component {
       console.log('WebSocket Client Connected');
       this.logInUser(this.componentWillReceiveProps)
     };
-    
+
     //when message is recieved
     client.onmessage = (message) => {
       const stateToChange = {}
@@ -123,10 +132,16 @@ class WebSocket extends Component {
           player.playVideo()
           break;
         case "chat":
-
-          const newarray = this.state.chat.concat(serverData.data)
-
+        const oldarray = this.state.chat.reverse()
+        const newarray= oldarray.concat(serverData.data).reverse()
+          
           this.setState({ chat: newarray })
+          break;
+          case "pause":
+          player.pauseVideo()
+
+          
+         
       }
 
       console.log("reply received: ", serverData)
@@ -136,18 +151,25 @@ class WebSocket extends Component {
 
   //updates chat input
   updateChat() {
-    console.log("sending " + this.state.sendchat)
-    client.send(JSON.stringify({
-      type: "message",
-      action: "chat",
-      data: {
-        user: this.state.username,
-        text: this.state.sendchat
+    if (this.state.sendchat !== "") {
+      console.log("sending " + this.state.sendchat)
+      client.send(JSON.stringify({
+        type: "message",
+        action: "chat",
+        data: {
+          user: this.state.username,
+          text: this.state.sendchat,
+          textcolor:this.state.textcolor
+        }
+      }));
+      if (this.state.chatInput !== "") {
+        this.state.chatInput.value = ""
+        this.setState({ sendchat: "" })
       }
-    }));
-
+    }
 
   }
+
   //logs video player status
   _onStateChange(event) {
     console.log(event)
@@ -164,12 +186,18 @@ class WebSocket extends Component {
   }
   handleChatInput(event) {
 
-    this.setState({ sendchat: event.target.value })
+    this.setState({
+      sendchat: event.target.value,
+      chatInput: event.target
+    })
   }
   handleInput(event) {
     this.setState({ videoUrl: event.target.value })
   }
   render() {
+    if (this.props.nameOfUser){
+
+    }
     return (
 
       <div className="container row mt-3">
@@ -180,15 +208,29 @@ class WebSocket extends Component {
             onStateChange={this._onStateChange}
             onReady={this._onReady}
           />
-          <input onChange={this.handleInput} />
-          <button onClick={() => this.sendVideoSrc()}>load Youtube URL</button>
-          <button onClick={() => this.playVideo()}>play video </button>
+          
+          <div className="input-group col-12 px-0 mb-1">
+            <input onChange={this.handleInput} className="form-control" />
+            <div className="input-group-append">
+              <button onClick={() => this.sendVideoSrc()} className="btn btn-light btn-outline-dark">load Youtube URL</button>
+              <button onClick={() => this.sendVideoSrc()} className="btn btn-light btn-outline-dark">Save URL</button>
+            </div>
 
+          </div>
+          
+          <div className="input-group">
+            <button onClick={() => this.playVideo("play")} className="btn btn-light btn-outline-dark ">Play </button>
+            <button onClick={() => this.playVideo("pause")} className="btn btn-light btn-outline-dark ">Pause </button>
+          </div>
         </div>
         <div className="col-lg-3 px-0 mx-0">
           <ChatBox chatContents={this.state.chat} />
-          <input onChange={this.handleChatInput} />
-          <button onClick={() => this.updateChat()}>send</button>
+          <div className="input-group">
+            <input onChange={this.handleChatInput} className="form-control" />
+            <div className="input-group-append">
+              <button onClick={() => this.updateChat()} className="btn btn-light btn-outline-dark">send</button>
+            </div>
+          </div>
         </div>
 
 

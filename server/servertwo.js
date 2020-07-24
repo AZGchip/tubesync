@@ -92,7 +92,7 @@ wss.on('request', function (request) {
                     clients[key].sendUTF(message.utf8Data);
                 }
             }
-             if (recievedData.type === typesDef.USER_EVENT) {
+            else if (recievedData.type === typesDef.USER_EVENT) {
                 users[userID] = recievedData;
                 userActivity.push(`${recievedData.username} joined to edit the document`);
                 json.data = { users, userActivity };
@@ -100,7 +100,7 @@ wss.on('request', function (request) {
                     clients[key].sendUTF(JSON.stringify(json));
                 }
             }
-           if (recievedData.type === typesDef.CONTENT_CHANGE) {
+           else if (recievedData.type === typesDef.CONTENT_CHANGE) {
                 editorContent = recievedData.content;
                 json.data = { editorContent, userActivity };
                 
@@ -108,7 +108,11 @@ wss.on('request', function (request) {
                     clients[key].sendUTF(JSON.stringify(json));
                 }
             }
-            
+            else{
+                for (key in clients) {
+                    clients[key].sendUTF(message.utf8Data);
+                }  
+            }
 
         }
 
