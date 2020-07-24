@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import ChatBox from "./Chatbox"
 import Youtube from "react-youtube";
+import UserInfoContext from '../utils/UserInfoContext';
+
 
 let player;
 let video = "";
@@ -16,8 +18,11 @@ var HOST = process.env.WEBSOCKET || 'ws://127.0.0.1:8050';
 const client = new W3CWebSocket(HOST);
 
 class WebSocket extends Component {
+
+  static contextType = UserInfoContext;
   constructor(props) {
     super(props);
+    console.log("props", props)
 
     this.state = {
       opts: options,
@@ -26,17 +31,6 @@ class WebSocket extends Component {
       player: "",
       videoUrl: "",
       chat: [
-        {
-          
-          user: "bobithy",
-          text: "hello world"
-        },
-        {
-          
-          user: "bingus",
-          text: "hello world"
-        },
-
       ],
       sendchat: "",
       currentUsers: [],
@@ -46,11 +40,19 @@ class WebSocket extends Component {
     };
     this.handleInput = this.handleInput.bind(this)
     this.handleChatInput = this.handleChatInput.bind(this)
+
   }
-  logInUser = () => {
+  componentWillReceiveProps(nextProps) {
+    console.log("will recieve",nextProps)
+    this.setState({ username: nextProps.nameOfUser });
+    return nextProps
+  }
+
+  logInUser = (user) => {
+    console.log("username", user)
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-      const username = this.props.username || "guest-"+s4();
-    
+    const username = this.props.nameOfUser || "guest-" + s4();
+
     if (username.trim()) {
       const data = {
         username
@@ -66,7 +68,7 @@ class WebSocket extends Component {
     }
   }
   sendVideoSrc = () => {
-    const videoId = this.state.videoUrl.match(/(?<=v=)[a-z0-9-]*/i)
+    const videoId = this.state.videoUrl.match(/(?<=v=)[a-z0-9-_]*/i)
     client.send(JSON.stringify({
       type: "message",
       action: "load_and_sync",
@@ -86,11 +88,14 @@ class WebSocket extends Component {
     console.log("attempting to play")
   }
   componentDidMount() {
-    
+
+    console.log("user", this.props)
     client.onopen = () => {
       console.log('WebSocket Client Connected');
-      this.logInUser()
+      this.logInUser(this.componentWillReceiveProps)
     };
+    
+    //when message is recieved
     client.onmessage = (message) => {
       const stateToChange = {}
       const serverData = JSON.parse(message.data);
@@ -116,12 +121,12 @@ class WebSocket extends Component {
           break;
         case "play":
           player.playVideo()
-        break;
+          break;
         case "chat":
-        
-        const newarray = this.state.chat.concat(serverData.data)
-        
-        this.setState({chat:newarray})
+
+          const newarray = this.state.chat.concat(serverData.data)
+
+          this.setState({ chat: newarray })
       }
 
       console.log("reply received: ", serverData)
@@ -129,9 +134,9 @@ class WebSocket extends Component {
 
   };
 
-
+  //updates chat input
   updateChat() {
-    console.log("sending "+ this.state.sendchat)
+    console.log("sending " + this.state.sendchat)
     client.send(JSON.stringify({
       type: "message",
       action: "chat",
@@ -143,6 +148,7 @@ class WebSocket extends Component {
 
 
   }
+  //logs video player status
   _onStateChange(event) {
     console.log(event)
     if (event.data === 5) {
@@ -157,7 +163,7 @@ class WebSocket extends Component {
 
   }
   handleChatInput(event) {
-    
+
     this.setState({ sendchat: event.target.value })
   }
   handleInput(event) {

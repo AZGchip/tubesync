@@ -10,7 +10,8 @@ import AuthService from '../utils/auth';
 function SavedBooks() {
   // get whole userData state object from App.js
   const userData = useContext(UserInfoContext);
-
+  console.log(userData)
+  
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = (bookId) => {
     // get token
@@ -29,7 +30,9 @@ function SavedBooks() {
     <>
       
       <Container>
-        <WebSocket userName={userData.username}/>
+        {userData.username}
+        <WebSocket nameOfUser={userData.username}/>
+      
         <h4>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
