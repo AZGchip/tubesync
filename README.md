@@ -1,59 +1,31 @@
-# googlebooks-app with authentication using JWT (JSON Web Token)
 
-## About This Boilerplate
+# tubesync
+          
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/AZGchip/tubesync/graphs/commit-activity)
+[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+          
+      
+Tubesync allows people to watch youtube videos together at the same time by utilizing a websocket server to synchronize video controls of all connected users. Tubesync also features a live chat and an auto generated guest id, allowing user interaction without the need to log in. 
 
-This setup allows for a Node/Express/React/JWT app which can be easily deployed to Heroku.
+## Table Of Contents
+* [Installation](#Installation)
+* [Usage](#Usage)
+* [Contact](#contact)
 
-The front-end React app will auto-reload as it's updated via webpack dev server, and the backend Express app will auto-reload independently with nodemon.
+      
+## <a name ="Installation"></a> Installation
+This project requires an mongo database and all dependencies to be installed, including node, react,react-youtube, and websocket.
 
-An article on how the server is setup with JWT can be found [here](https://hptechblogs.com/using-json-web-token-for-authentication/). This has been modified to use a mongo database instead of hardcoded array of users.
+      
+## <a name ="Usage"></a> Usage
+Logged in users have access to video controls such as opening a new video, playing, and pausing. a guest user has access to the live chat and video but not video controls.
 
-The front end has been setup to use JWT as a way of authenticating users and routes. To understand it's structure better please refer to the following article [here](https://hptechblogs.com/using-json-web-token-react/)
+      
+## <a name ="contact"></a> Contact me
+AZGchip  
+[![GitHub followers](https://img.shields.io/github/followers/AZGchip.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/AZGchip?tab=followers)
 
-Please feel free to modify this code in anyway you see fit for your project. It is a boilerplate setup that tries to make sure you can get something up and running without having to worry about setting up user authentication from scratch.
-I highly suggest you read the articles before jumping in so you can have an better understanding of how everything works in the code.
 
-Server-side article and using JWT: https://hptechblogs.com/using-json-web-token-for-authentication/
+<img src="https://avatars2.githubusercontent.com/u/60306563?v=4" alt="profile" width="100"/>
 
-Front End article on using the JWT on a react application: https://hptechblogs.com/using-json-web-token-react/
-
-## Starting the app locally
-
-First off make sure you have a local version of MongoDB running on your machine. This project will make a local database for you called `appDB`.
-
-```
-mongod
-```
-
-Start by installing front and backend dependencies. While in the root directory, run the following command:
-
-```
-npm install
-```
-
-After all installations complete, run the following command in your terminal:
-
-```
-npm start
-```
-
-That's it, your app should be running on <http://localhost:3000>. The Express server should intercept any AJAX requests from the client.
-
-## Deployment (Heroku)
-
-### Create a Git Repo
-
-Once you're ready to deploy, start by making sure your project is a git repository. If so, proceed to the next section, otherwise run the following commands in your terminal:
-
-```
-git init
-git add .
-git commit -m "Initial commit"
-```
-
-### Deploying
-
-1. Go onto your heroku account and link your repository through the UI
-2. Go to resources and find mLab as a Add-on
-3. Provision a Mongo Database
-4. Go back and click "Deploy"
+If you have any questions, please contact me at:  [github.com/AZGchip](https://github.com/AZGchip). 
