@@ -4,7 +4,13 @@ import ChatBox from "./Chatbox"
 import Youtube from "react-youtube";
 import UserInfoContext from '../utils/UserInfoContext';
 
-
+const tempLinks = [
+  {
+    title: "Wintergatan - Marble Machine (music instrument using 2000 marbles)",
+    id: "IvUU8joBb1Q",
+    source: "https://www.youtube.com/watch?v=IvUU8joBb1Q"
+  }
+]
 let player;
 let video = "";
 const options = {
@@ -59,17 +65,17 @@ class WebSocket extends Component {
   //logs user in using login info or generates guest name
   logInUser = (user) => {
     console.log("username", user)
-    
+
     const s4 = () => Math.floor((2 + Math.random()) * 0x10000).toString(16).substring(1);
     const username = this.co || "guest-" + s4();
-    
-   
+
+
     const textcolor = this.numberBetween(0, 50)
     if (username.trim()) {
       const data = {
         username,
         textcolor,
-       
+
       };
       this.setState({
         ...data
@@ -80,6 +86,13 @@ class WebSocket extends Component {
         }));
       });
     }
+  }
+  loadLink=(thelink)=>{
+    client.send(JSON.stringify({
+      type: "message",
+      action: "load_and_sync",
+      data: thelink
+    }));
   }
   sendVideoSrc = () => {
     if (this.state.videoUrl !== "") {
@@ -189,7 +202,7 @@ class WebSocket extends Component {
     player = event.target;
     player.seekTo({ seconds: 1, allowSeekAhead: true })
     player.pauseVideo()
-   
+
 
   }
   handleChatInput(event) {
@@ -204,6 +217,7 @@ class WebSocket extends Component {
   }
   render() {
     let controls
+    let savedLinks
     //if logged in render player controls
     if (this.props.nameOfUser) {
       controls = <div>
@@ -220,9 +234,31 @@ class WebSocket extends Component {
           <button onClick={() => this.playVideo("play")} className="btn btn-light btn-outline-dark ">Play </button>
           <button onClick={() => this.playVideo("pause")} className="btn btn-light btn-outline-dark ">Pause </button>
         </div>
-      </div>
+      
+      <div className="card bg-dark">
+          <div className="row no-gutters">
+            <div className="col-auto">
+              <img style={{ height: "100px" }} src={"https://img.youtube.com/vi/" + tempLinks[0].id + "/hqdefault.jpg"} className="img-fluid" alt=""></img>
+            </div>
+            <div className="col">
+              <div className="card-block px-2">
+                <h5 className="card-title text-light">{tempLinks[0].title}</h5>
+                <p className="text-light">
+
+                  Marble Machine built and composed by Martin Molin
+Video filmed and edited by Hannes Knutsson </p>
+
+              </div>
+            </div>
+          </div>
+          <div className="card-footer w-100 text-muted">
+            <button className="btn btn-light" >Load</button>
+          </div>
+        </div>
+        </div>
     }
-    else { controls = <div></div> }
+    else { controls = <div></div>
+           }
     return (
 
       <div className="container row mt-3 " >
@@ -248,8 +284,9 @@ class WebSocket extends Component {
 
 
 
-
+        
       </div>
+
     );
   }
 

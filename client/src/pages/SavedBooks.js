@@ -33,11 +33,12 @@ function SavedBooks() {
         
         <WebSocket nameOfUser={userData.username}/>
       
-        <h4>
+        {/* <h4>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'No stored links'}
-        </h4>
+        </h4> */}
+        
         <CardColumns>
           {userData.savedBooks.map((book) => {
             return (

@@ -8,7 +8,7 @@ const SyncData = [
   {
     image:"https://img.youtube.com/vi/uLF6VFME2jc/hqdefault.jpg",
     title:"presentation time!",
-    link:"http://localhost:3000/",
+    link:"http://localhost:3000/saved",
     video:"01. Frostpunk Theme - Frostpunk Original Soundtrack"
   },
   
@@ -65,14 +65,15 @@ function SearchBooks() {
       .catch((err) => console.log(err));
   };
   const publicSyncs = SyncData.map((card) =>{
-    return <div className="card col-md-3 float-left px-0 border-dark bg-dark">
-     
+    return <div className="card col-md-3 float-left px-0 border-dark bg-dark btn">
+     <a href={card.link}>
   
-      <img className="card-img-top" src={card.image} alt="Card image cap"style={{width:"100%"}}></img>
+      <img className="card-img-top" src={card.image} alt="Card image cap"style={{width:"100%"}}></img> </a>
   <div className="text-light">
   <h5 className="card-title text-center">{card.title}</h5>
   <p className="card-text font-weight-light"><small>Currently watching: {card.video}</small></p>
   </div>
+ 
     </div>
   })
   return (
