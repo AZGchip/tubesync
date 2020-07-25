@@ -26,6 +26,7 @@
 const webSocketServer = require("websocket").server
 const http = require("http");
 let userActivity = [];
+let host = "none";
 const webSocketServerPort = 8050;
 // Starts http server and the websocket server.
 const server = http.createServer();
@@ -95,23 +96,28 @@ wss.on('request', function (request) {
             else if (recievedData.type === typesDef.USER_EVENT) {
                 users[userID] = recievedData;
                 userActivity.push(`${recievedData.username} joined to edit the document`);
-                json.data = { users, userActivity };
+                  
+                
+
+                json.data = { users, userActivity, host };
                 for (key in clients) {
                     clients[key].sendUTF(JSON.stringify(json));
                 }
+
+
             }
-           else if (recievedData.type === typesDef.CONTENT_CHANGE) {
+            else if (recievedData.type === typesDef.CONTENT_CHANGE) {
                 editorContent = recievedData.content;
                 json.data = { editorContent, userActivity };
-                
+
                 for (key in clients) {
                     clients[key].sendUTF(JSON.stringify(json));
                 }
             }
-            else{
+            else {
                 for (key in clients) {
                     clients[key].sendUTF(message.utf8Data);
-                }  
+                }
             }
 
         }

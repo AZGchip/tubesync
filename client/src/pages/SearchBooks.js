@@ -4,6 +4,15 @@ import { Jumbotron, Container, Row, Col, Form, Button, Card, CardColumns } from 
 import UserInfoContext from '../utils/UserInfoContext';
 import AuthService from '../utils/auth';
 import { saveBook, searchGoogleBooks } from '../utils/API';
+const SyncData = [
+  {
+    image:"https://img.youtube.com/vi/uLF6VFME2jc/hqdefault.jpg",
+    title:"presentation time!",
+    link:"http://localhost:3000/",
+    video:"01. Frostpunk Theme - Frostpunk Original Soundtrack"
+  },
+  
+]
 
 function SearchBooks() {
   // create state for holding returned google api data
@@ -55,60 +64,27 @@ function SearchBooks() {
       .then(() => userData.getUserData())
       .catch((err) => console.log(err));
   };
-
+  const publicSyncs = SyncData.map((card) =>{
+    return <div className="card col-md-3 float-left px-0 border-dark bg-dark">
+     
+  
+      <img className="card-img-top" src={card.image} alt="Card image cap"style={{width:"100%"}}></img>
+  <div className="text-light">
+  <h5 className="card-title text-center">{card.title}</h5>
+  <p className="card-text font-weight-light"><small>Currently watching: {card.video}</small></p>
+  </div>
+    </div>
+  })
   return (
-    <>
-      <Jumbotron fluid className='text-light bg-dark'>
-        <Container>
-          <h1>Search for Books!</h1>
-          <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
-              <Col xs={12} md={8}>
-                <Form.Control
-                  name='searchInput'
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  type='text'
-                  size='lg'
-                  placeholder='Search for a book'
-                />
-              </Col>
-              <Col xs={12} md={4}>
-                <Button type='submit' variant='success' size='lg'>
-                  Submit Search
-                </Button>
-              </Col>
-            </Form.Row>
-          </Form>
-        </Container>
-      </Jumbotron>
 
-      <Container>
-        <h2>{searchedBooks.length ? `Viewing ${searchedBooks.length} results:` : 'Search for a book to begin'}</h2>
-        <CardColumns>
-          {searchedBooks.map((book) => {
-            return (
-              <Card key={book.bookId} border='dark'>
-                {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
-                <Card.Body>
-                  <Card.Title>{book.title}</Card.Title>
-                  <p className='small'>Authors: {book.authors}</p>
-                  <Card.Text>{book.description}</Card.Text>
-                  {userData.username && (
-                    <Button
-                      disabled={userData.savedBooks?.some((savedBook) => savedBook.bookId === book.bookId)}
-                      className='btn-block btn-info'
-                      onClick={() => handleSaveBook(book.bookId)}>
-                      {userData.savedBooks?.some((savedBook) => savedBook.bookId === book.bookId)
-                        ? 'This book has already been saved!'
-                        : 'Save this Book!'}
-                    </Button>
-                  )}
-                </Card.Body>
-              </Card>
-            );
-          })}
-        </CardColumns>
+    <>
+      
+
+      <Container className="text-light">
+        <h1>Find a Sync</h1>
+        <h5>Watch Youtube Videos Together, From Anywhere! (with internet) </h5><hr></hr>
+        <h4>Public Syncs:</h4>
+        {publicSyncs}
       </Container>
     </>
   );

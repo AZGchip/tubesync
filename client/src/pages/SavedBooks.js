@@ -30,7 +30,7 @@ function SavedBooks() {
     <>
       
       <Container>
-        {userData.username}
+        
         <WebSocket nameOfUser={userData.username}/>
       
         <h4>
