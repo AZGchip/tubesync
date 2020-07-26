@@ -23,7 +23,7 @@ const options = {
     modestbranding: 1
   },
 };
-var HOST = process.env.WEBSOCKET || 'ws://127.0.0.1:8050';
+var HOST = process.env.WEBSOCKET || 'http://159.89.226.140:8050';
 const client = new W3CWebSocket(HOST);
 
 class WebSocket extends Component {
