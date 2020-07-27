@@ -8,7 +8,7 @@ const SyncData = [
   {
     image:"https://img.youtube.com/vi/uLF6VFME2jc/hqdefault.jpg",
     title:"presentation time!",
-    link:"http://localhost:3000/saved",
+    link:"http://tubesync.net/saved",
     video:"01. Frostpunk Theme - Frostpunk Original Soundtrack"
   },
   

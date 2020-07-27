@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import SearchBooks from './pages/SearchBooks';
-import SavedBooks from './pages/SavedBooks';
+import SearchBooks from './pages/Home';
+import SavedBooks from './pages/Player';
 import Navbar from './components/Navbar';
 
 import * as API from './utils/API';
