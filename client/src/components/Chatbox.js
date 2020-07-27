@@ -22,7 +22,9 @@ class Chat extends React.Component {
                     <div className="text-light">{chat.text}</div>
                 </div>
 
-            })}</div>)
+            })}</div>
+            
+            )
     }
 }
 

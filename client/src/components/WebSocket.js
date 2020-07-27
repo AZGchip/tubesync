@@ -170,7 +170,8 @@ class WebSocket extends Component {
   };
 
   //updates chat input
-  updateChat() {
+  updateChat(event) {
+    
     if (this.state.sendchat !== "") {
       console.log("sending " + this.state.sendchat)
       client.send(JSON.stringify({
@@ -185,7 +186,9 @@ class WebSocket extends Component {
       if (this.state.chatInput !== "") {
         this.state.chatInput.value = ""
         this.setState({ sendchat: "" })
+
       }
+     
     }
 
   }
@@ -205,6 +208,10 @@ class WebSocket extends Component {
 
 
   }
+  _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      this.updateChat()
+    }}
   handleChatInput(event) {
 
     this.setState({
@@ -273,8 +280,8 @@ Video filmed and edited by Hannes Knutsson </p>
         </div>
         <div className="col-lg-3 px-0 mx-0">
           <ChatBox chatContents={this.state.chat} />
-          <div className="input-group">
-            <input onChange={this.handleChatInput} className="form-control" />
+          <div className="input-group ">
+            <input onChange={this.handleChatInput}onKeyDown={this._handleKeyDown} className="form-control" />
             <div className="input-group-append">
               <button onClick={() => this.updateChat()} className="btn btn-light btn-outline-dark">send</button>
             </div>
