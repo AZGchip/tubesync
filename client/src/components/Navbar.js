@@ -29,7 +29,7 @@ function AppNavbar() {
               {/* if user is logged in show saved books and logout */}
               {username ? (
                 <>
-                  <Nav.Link as={Link} to='/saved'>
+                  <Nav.Link as={Link} to='/watch'>
                     Start Sync
                   </Nav.Link>
                   <Nav.Link onClick={AuthService.logout}>Logout</Nav.Link>
