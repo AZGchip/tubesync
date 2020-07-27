@@ -41,6 +41,7 @@ class WebSocket extends Component {
       videoUrl: "",
       chat: [
       ],
+
       sendchat: "",
       currentUsers: [],
       userActivity: [],
@@ -48,7 +49,9 @@ class WebSocket extends Component {
       text: '',
       textcolor: "",
       chatInput: "",
-      host: ""
+      host: "",
+
+
     };
     this.handleInput = this.handleInput.bind(this)
     this.handleChatInput = this.handleChatInput.bind(this)
@@ -160,8 +163,6 @@ class WebSocket extends Component {
         case "pause":
           player.pauseVideo()
 
-
-
       }
 
       console.log("reply received: ", serverData)
@@ -170,7 +171,7 @@ class WebSocket extends Component {
   };
 
   //updates chat input
-  updateChat(event) {
+  updateChat() {
     
     if (this.state.sendchat !== "") {
       console.log("sending " + this.state.sendchat)

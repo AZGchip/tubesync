@@ -95,7 +95,7 @@ wss.on('request', function (request) {
             }
             else if (recievedData.type === typesDef.USER_EVENT) {
                 users[userID] = recievedData;
-                userActivity.push(`${recievedData.username} joined to edit the document`);
+                userActivity.push(`${recievedData.username} joined`);
                   
                 
 
