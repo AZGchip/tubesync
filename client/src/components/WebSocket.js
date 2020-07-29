@@ -3,7 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import ChatBox from "./Chatbox"
 import Youtube from "react-youtube";
 import UserInfoContext from '../utils/UserInfoContext';
-
+import SyncTimer from "./SyncTimer"
 const tempLinks = [
   {
     title: "Wintergatan - Marble Machine (music instrument using 2000 marbles)",
@@ -90,12 +90,23 @@ class WebSocket extends Component {
       });
     }
   }
-  loadLink=(thelink)=>{
+  loadLink = (thelink) => {
     client.send(JSON.stringify({
       type: "message",
       action: "load_and_sync",
       data: thelink
     }));
+  }
+  //checks if url input is a youtube link.
+  //sends link save request to parent
+  saveLink = () => {
+    if (this.state.videoUrl.match(/(?<=v=)[a-z0-9-_]*/i)){
+      console.log("saving link!");
+      this.props.saveRequest()
+    }
+    else {
+      console.log("invalid youtube youtube link")
+    }
   }
   sendVideoSrc = () => {
     if (this.state.videoUrl !== "") {
@@ -153,6 +164,10 @@ class WebSocket extends Component {
           break;
         case "play":
           player.playVideo()
+          console.log("time", player.getCurrentTime())
+          this.setState({
+            isPlaying: true
+          })
           break;
         case "chat":
           const oldarray = this.state.chat.reverse()
@@ -161,7 +176,12 @@ class WebSocket extends Component {
           this.setState({ chat: newarray })
           break;
         case "pause":
+
           player.pauseVideo()
+          this.setState({
+            isPlaying: false
+          })
+
 
       }
 
@@ -172,7 +192,7 @@ class WebSocket extends Component {
 
   //updates chat input
   updateChat() {
-    
+
     if (this.state.sendchat !== "") {
       console.log("sending " + this.state.sendchat)
       client.send(JSON.stringify({
@@ -189,11 +209,13 @@ class WebSocket extends Component {
         this.setState({ sendchat: "" })
 
       }
-     
+
     }
 
   }
-
+  gettime() {
+    console.log("time", player.getCurrentTime())
+  }
   //logs video player status
   _onStateChange(event) {
     console.log(event)
@@ -201,7 +223,11 @@ class WebSocket extends Component {
       player.seekTo({ seconds: 0, allowSeekAhead: true })
       player.pauseVideo()
     }
+    if (event.data === 1) {
+
+    }
   }
+  //when player loads
   _onReady(event) {
     player = event.target;
     player.seekTo({ seconds: 1, allowSeekAhead: true })
@@ -209,10 +235,12 @@ class WebSocket extends Component {
 
 
   }
+  //sends chat if enter is pressed
   _handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.updateChat()
-    }}
+    }
+  }
   handleChatInput(event) {
 
     this.setState({
@@ -221,9 +249,13 @@ class WebSocket extends Component {
     })
   }
   handleInput(event) {
-    this.setState({ videoUrl: event.target.value })
+    this.setState({ videoUrl: event.target.value }, () => {
+      if (this.props.onChange) {
+        this.props.onChange(this.state.videoUrl)
+      }
+    })
   }
-  render() {
+  render(props) {
     let controls
     let savedLinks
     //if logged in render player controls
@@ -233,7 +265,7 @@ class WebSocket extends Component {
           <input onChange={this.handleInput} className="form-control" />
           <div className="input-group-append">
             <button onClick={() => this.sendVideoSrc()} className="btn btn-light btn-outline-dark">load Youtube URL</button>
-            <button onClick={() => this.sendVideoSrc()} className="btn btn-light btn-outline-dark">Save URL</button>
+            <button onClick={() => this.saveLink()} className="btn btn-light btn-outline-dark">Save URL</button>
           </div>
 
         </div>
@@ -242,31 +274,13 @@ class WebSocket extends Component {
           <button onClick={() => this.playVideo("play")} className="btn btn-light btn-outline-dark ">Play </button>
           <button onClick={() => this.playVideo("pause")} className="btn btn-light btn-outline-dark ">Pause </button>
         </div>
-      
-      <div className="card bg-dark">
-          <div className="row no-gutters">
-            <div className="col-auto">
-              <img style={{ height: "100px" }} src={"https://img.youtube.com/vi/" + tempLinks[0].id + "/hqdefault.jpg"} className="img-fluid" alt=""></img>
-            </div>
-            <div className="col">
-              <div className="card-block px-2">
-                <h5 className="card-title text-light">{tempLinks[0].title}</h5>
-                <p className="text-light">
 
-                  Marble Machine built and composed by Martin Molin
-Video filmed and edited by Hannes Knutsson </p>
-
-              </div>
-            </div>
-          </div>
-          <div className="card-footer w-100 text-muted">
-            <button className="btn btn-light" >Load</button>
-          </div>
-        </div>
-        </div>
+        
+      </div>
     }
-    else { controls = <div></div>
-           }
+    else {
+      controls = <div></div>
+    }
     return (
 
       <div className="container row mt-3 " >
@@ -282,17 +296,17 @@ Video filmed and edited by Hannes Knutsson </p>
         <div className="col-lg-3 px-0 mx-0">
           <ChatBox chatContents={this.state.chat} />
           <div className="input-group ">
-            <input onChange={this.handleChatInput}onKeyDown={this._handleKeyDown} className="form-control" />
+            <input onChange={this.handleChatInput} onKeyDown={this._handleKeyDown} className="form-control" />
             <div className="input-group-append">
               <button onClick={() => this.updateChat()} className="btn btn-light btn-outline-dark">send</button>
             </div>
           </div>
         </div>
+        <SyncTimer isPlaying={this.state.isPlaying} gettime={this.gettime} />
 
 
 
 
-        
       </div>
 
     );

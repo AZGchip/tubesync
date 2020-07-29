@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { Jumbotron, Container, Row, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
-
+import * as API from '../utils/API';
 import UserInfoContext from '../utils/UserInfoContext';
 import AuthService from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { saveBook} from '../utils/API';
 const SyncData = [
   {
     image:"https://img.youtube.com/vi/uLF6VFME2jc/hqdefault.jpg",
@@ -30,21 +30,21 @@ function SearchBooks() {
       return false;
     }
 
-    searchGoogleBooks(searchInput)
-      .then(({ data }) => {
-        const bookData = data.items.map((book) => ({
-          bookId: book.id,
-          authors: book.volumeInfo.authors || ['No author to display'],
-          title: book.volumeInfo.title,
-          description: book.volumeInfo.description,
-          image: book.volumeInfo.imageLinks?.thumbnail || '',
-        }));
-        console.log(bookData);
+    // searchGoogleBooks(searchInput)
+    //   .then(({ data }) => {
+    //     const bookData = data.items.map((book) => ({
+    //       bookId: book.id,
+    //       authors: book.volumeInfo.authors || ['No author to display'],
+    //       title: book.volumeInfo.title,
+    //       description: book.volumeInfo.description,
+    //       image: book.volumeInfo.imageLinks?.thumbnail || '',
+    //     }));
+    //     console.log(bookData);
 
-        return setSearchedBooks(bookData);
-      })
-      .then(() => setSearchInput(''))
-      .catch((err) => console.log(err));
+    //     return setSearchedBooks(bookData);
+    //   })
+    //   .then(() => setSearchInput(''))
+    //   .catch((err) => console.log(err));
   };
 
   // create function to handle saving a book to our database

@@ -33,6 +33,7 @@ export const deleteBook = function (bookId, token) {
 
 // make a search to google books api
 // https://www.googleapis.com/books/v1/volumes?q=harry+potter
-export const searchGoogleBooks = function (query) {
-  return axios.get('https://www.googleapis.com/books/v1/volumes', { params: { q: query } });
+export const searchYoutubeData = function (query) {
+  return axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${query.id}&key=${query.key}`);
 };
+
