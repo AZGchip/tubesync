@@ -7,7 +7,7 @@ import { saveBook} from '../utils/API';
 const SyncData = [
   {
     image:"https://img.youtube.com/vi/uLF6VFME2jc/hqdefault.jpg",
-    title:"presentation time!",
+    title:"Demo Day!",
     link:"http://tubesync.net/watch",
     video:"01. Frostpunk Theme - Frostpunk Original Soundtrack"
   },
@@ -83,7 +83,7 @@ function SearchBooks() {
 
       <Container className="text-light">
         <h1>Find a Sync</h1>
-        <h5>Watch Youtube Videos Together, From Anywhere! (with internet) </h5><hr></hr>
+        <h5>Watch Youtube Videos Together, From Anywhere!  </h5><hr></hr>
         <h4>Public Syncs:</h4>
         {publicSyncs}
       </Container>
