@@ -19,8 +19,14 @@ const key = "AIzaSyDiq2w49wObAXmSH6cFRl09ydu3ckGKNq8"
 let vidID;
 
 function SavedBooks() {
-  
-  const eventhandler = data => vidID = data.match(/(?<=v=)[a-z0-9-_]*/i)[0] ;
+
+  const eventhandler = (data) => {
+    if (data.match(/(?<=v=)[a-z0-9-_]*/i)) {
+      vidID = data.match(/(?<=v=)[a-z0-9-_]*/i)[0]
+    }
+    else{vidID = false}
+  }
+
 
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
@@ -41,18 +47,18 @@ function SavedBooks() {
       getYoutubeDataAndSave(vidID)
     }
   };
-  function getYoutubeDataAndSave(id){
-    searchYoutubeData({key,id:id}).then(({data})=>{
-     console.log("youtube Data",data)
-     const basicInfo = data.items[0].snippet
-     const databaseInfo = {
-       linkId:id,
-       title:basicInfo.localized.title,
-       channelName: basicInfo.channelTitle
-     }
-     handleSaveLink(databaseInfo)
-   })
-   };
+  function getYoutubeDataAndSave(id) {
+    searchYoutubeData({ key, id: id }).then(({ data }) => {
+      console.log("youtube Data", data)
+      const basicInfo = data.items[0].snippet
+      const databaseInfo = {
+        linkId: id,
+        title: basicInfo.localized.title,
+        channelName: basicInfo.channelTitle
+      }
+      handleSaveLink(databaseInfo)
+    })
+  };
   // create function to handle saving a book to our database
   const handleSaveLink = (bookId) => {
     // find the book in `searchedBooks` state by the matching id
@@ -87,14 +93,14 @@ function SavedBooks() {
   console.log("this is user data", userData)
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
-  const handleDeleteBook = (bookId) => {
+  const handleDeleteBook = (linkId) => {
     // get token
     const token = AuthService.loggedIn() ? AuthService.getToken() : null;
 
     if (!token) {
       return false;
     }
-    API.deleteBook(bookId, token)
+    API.deleteBook(linkId, token)
       // upon succes, update user data to reflect book change
       .then(() => userData.getUserData())
       .catch((err) => console.log(err));
@@ -115,7 +121,7 @@ function SavedBooks() {
 
         <CardColumns>
           {userData.savedBooks.map((link) => {
-            
+
             console.log("this is link info", link)
             return (
               <div className="card bg-dark">
@@ -125,16 +131,17 @@ function SavedBooks() {
                   </div>
                   <div className="col">
                     <div className="card-block px-2">
-            <h5 className="card-title text-light">{link.title}</h5>
+                      <h5 className="card-title text-light">{link.title}</h5>
                       <p className="text-light">
-              {link.channelName}
- </p>
+                        {link.channelName}
+                      </p>
 
                     </div>
                   </div>
                 </div>
                 <div className="card-footer w-100 text-muted">
                   <button className="btn btn-light" >Load</button>
+                  <button className="btn  btn-danger float-right" onClick={() => handleDeleteBook(link.linkId)}>Delete</button>
                 </div>
               </div>
               // <Card key={book.bookId} border='dark'>
