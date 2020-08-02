@@ -51,12 +51,14 @@ module.exports = {
   // user comes from `req.user` created in the auth middleware function
   async saveBook({ user, body }, res) {
     console.log(user);
+    console.log("savebook body: ",body)
     try {
       const updatedUser = await User.findOneAndUpdate(
         { _id: user._id },
-        { $addToSet: { savedBooks: body } },
+        { $addToSet: { savedBooks:  body} },
         { new: true, runValidators: true }
       );
+      console.log("updated user",updatedUser)
       return res.json(updatedUser);
     } catch (err) {
       console.log(err);
@@ -67,7 +69,7 @@ module.exports = {
   async deleteBook({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
-      { $pull: { savedBooks: { bookId: params.id } } },
+      { $pull: { savedBooks: { linkId: params.id } } },
       { new: true }
     );
     if (!updatedUser) {
