@@ -67,6 +67,7 @@ wss.on('request', function (request) {
             console.log("message:", message)
             const recievedData = JSON.parse(message.utf8Data);
             console.log(recievedData)
+            
             const json = { type: recievedData.type };
             if (recievedData.action === "load_and_sync") {
                 console.log("receved: ", recievedData)
@@ -75,36 +76,13 @@ wss.on('request', function (request) {
                     clients[key].sendUTF(message.utf8Data);
                 }
             }
-            else if (recievedData.action === "sync_start") {
-                console.log("Preparing Sync")
-
-                for (key in clients) {
-                    clients[key].sendUTF(message.utf8Data);
-                }
-
-            }
-            else if (recievedData.action === "play") {
-                for (key in clients) {
-                    clients[key].sendUTF(message.utf8Data);
-                }
-            }
-            else if (recievedData.action === "chat") {
-                for (key in clients) {
-                    clients[key].sendUTF(message.utf8Data);
-                }
-            }
             else if (recievedData.type === typesDef.USER_EVENT) {
                 users[userID] = recievedData;
                 userActivity.push(`${recievedData.username} joined`);
-                  
-                
-
                 json.data = { users, userActivity, host };
                 for (key in clients) {
                     clients[key].sendUTF(JSON.stringify(json));
                 }
-
-
             }
             else if (recievedData.type === typesDef.CONTENT_CHANGE) {
                 editorContent = recievedData.content;
