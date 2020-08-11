@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "prodProxy":"http://159.89.226.140/:3001 http://127.0.0.1:3001",
   "proxy": "http://159.89.226.140/:3001",
   "dependencies": {
     "@babel/core": "7.9.0",
@@ -68,7 +69,7 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "forever start scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },

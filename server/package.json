@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "websocket": "node servertwo.js",
+    "start": "forever start -a server.js",
+    "websocket": "forever start -a servertwo.js",
     "watch": "nodemon server.js"
   },
   "keywords": [],
