@@ -27,7 +27,7 @@ const webSocketServer = require("websocket").server
 const http = require("http");
 let userActivity = [];
 let host = "none";
-const webSocketServerPort = "http://159.89.226.140/:8050";
+const webSocketServerPort = "ws://159.89.226.140/:8050";
 // Starts http server and the websocket server.
 const server = http.createServer();
 server.listen(webSocketServerPort);
